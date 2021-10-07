@@ -6,4 +6,4 @@ pretrained_models
 *.so
 *.ipynb_checkpoints*
 *.yml
-*.json
+venv

@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from tkinter import messagebox
+#from tkinter import messagebox
 
 from isegm.inference import clicker
 from isegm.inference.predictors import get_predictor
@@ -8,7 +8,7 @@ from isegm.utils.vis import draw_with_blend_and_clicks
 
 
 class InteractiveController:
-    def __init__(self, net, device, predictor_params, update_image_callback, prob_thresh=0.5):
+    def __init__(self, net, device, predictor_params, update_image_callback=None, prob_thresh=0.5):
         self.net = net
         self.prob_thresh = prob_thresh
         self.clicker = clicker.Clicker()
@@ -21,7 +21,7 @@ class InteractiveController:
         self.image = None
         self.predictor = None
         self.device = device
-        self.update_image_callback = update_image_callback
+        #self.update_image_callback = update_image_callback
         self.predictor_params = predictor_params
         self.reset_predictor()
 
@@ -30,11 +30,11 @@ class InteractiveController:
         self._result_mask = np.zeros(image.shape[:2], dtype=np.uint16)
         self.object_count = 0
         self.reset_last_object(update_image=False)
-        self.update_image_callback(reset_canvas=True)
+        #self.update_image_callback(reset_canvas=True)
 
     def set_mask(self, mask):
         if self.image.shape[:2] != mask.shape[:2]:
-            messagebox.showwarning("Warning", "A segmentation mask must have the same sizes as the current image!")
+            #messagebox.showwarning("Warning", "A segmentation mask must have the same sizes as the current image!")
             return
 
         if len(self.probs_history) > 0:
@@ -64,7 +64,7 @@ class InteractiveController:
         else:
             self.probs_history.append((np.zeros_like(pred), pred))
 
-        self.update_image_callback()
+        #self.update_image_callback()
 
     def undo_click(self):
         if not self.states:
@@ -76,7 +76,7 @@ class InteractiveController:
         self.probs_history.pop()
         if not self.probs_history:
             self.reset_init_mask()
-        self.update_image_callback()
+        #self.update_image_callback()
 
     def partially_finish_object(self):
         object_prob = self.current_object_prob
@@ -89,7 +89,7 @@ class InteractiveController:
         self.clicker.reset_clicks()
         self.reset_predictor()
         self.reset_init_mask()
-        self.update_image_callback()
+        #self.update_image_callback()
 
     def finish_object(self):
         if self.current_object_prob is None:
@@ -105,8 +105,8 @@ class InteractiveController:
         self.clicker.reset_clicks()
         self.reset_predictor()
         self.reset_init_mask()
-        if update_image:
-            self.update_image_callback()
+        #if update_image:
+        #    self.update_image_callback()
 
     def reset_predictor(self, predictor_params=None):
         if predictor_params is not None:
